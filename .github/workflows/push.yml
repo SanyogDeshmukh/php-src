@@ -137,12 +137,12 @@ jobs:
         if: ${{ !matrix.asan }}
         uses: ./.github/actions/verify-generated-files
   LINUX_S390X:
-  if: github.repository == 'SanyogDeshmukh/php-src' || github.event_name == 'pull_request'
-  name: LINUX_S390X_${{ matrix.debug && 'DEBUG' || 'RELEASE' }}_${{ matrix.zts && 'ZTS' || 'NTS' }}${{ matrix.asan && '_ASAN' || '' }}
-  runs-on: self-hosted
-  strategy:
-    fail-fast: false
-    matrix:
+    if: github.repository == 'php/php-src' || github.event_name == 'pull_request'
+    name: LINUX_S390X_${{ matrix.debug && 'DEBUG' || 'RELEASE' }}_${{ matrix.zts && 'ZTS' || 'NTS' }}${{ matrix.asan && '_ASAN' || '' }}
+    runs-on: self-hosted
+    strategy:
+      fail-fast: false
+        matrix:
       include:
         - debug: false
           zts: false
@@ -200,7 +200,8 @@ jobs:
           ${{ matrix.asan && '--asan -x' || '' }}
     - name: Verify generated files are up to date
       if: ${{ !matrix.asan }}
-      uses: ./.github/actions/verify-generated-files      
+      uses: ./.github/actions/verify-generated-files
+  
   LINUX_X32:
     if: github.repository == 'php/php-src' || github.event_name == 'pull_request'
     name: LINUX_X32_DEBUG_ZTS
