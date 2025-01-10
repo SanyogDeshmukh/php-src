@@ -136,6 +136,71 @@ jobs:
       - name: Verify generated files are up to date
         if: ${{ !matrix.asan }}
         uses: ./.github/actions/verify-generated-files
+  LINUX_S390X:
+  if: github.repository == 'SanyogDeshmukh/php-src' || github.event_name == 'pull_request'
+  name: LINUX_S390X_${{ matrix.debug && 'DEBUG' || 'RELEASE' }}_${{ matrix.zts && 'ZTS' || 'NTS' }}${{ matrix.asan && '_ASAN' || '' }}
+  runs-on: self-hosted
+  strategy:
+    fail-fast: false
+    matrix:
+      include:
+        - debug: false
+          zts: false
+          asan: false
+        - debug: true
+          zts: true
+          asan: true
+  env:
+    CC: ccache gcc
+    CXX: ccache g++
+  timeout-minutes: 50
+  steps:
+    - name: git checkout
+      uses: actions/checkout@v4
+    - name: apt
+      uses: ./.github/actions/apt-s390x
+    - name: System info
+      run: |
+        echo "::group::Show host CPU info"
+        lscpu
+        echo "::endgroup::"
+        echo "::group::Show installed package versions"
+        dpkg -l
+        echo "::endgroup::"
+    - name: Setup Caddy server
+      uses: ./.github/actions/setup-caddy
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1.2
+      with:
+        key: "LINUX_S390X_${{ matrix.debug && 'DEBUG' || 'RELEASE' }}_${{ matrix.zts && 'ZTS' || 'NTS' }}${{ matrix.asan && '_ASAN' || '' }}-${{hashFiles('main/php_version.h')}}"
+        append-timestamp: false
+        save: ${{ github.event_name != 'pull_request' }}
+    - name: ./configure
+      uses: ./.github/actions/configure-s390x
+      with:
+        configurationParameters: >-
+          --${{ matrix.debug && 'enable' || 'disable' }}-debug
+          --${{ matrix.zts && 'enable' || 'disable' }}-zts
+          ${{ matrix.asan && 'CFLAGS="-fsanitize=undefined,address -fno-sanitize=function -DZEND_TRACK_ARENA_ALLOC" LDFLAGS="-fsanitize=undefined,address -fno-sanitize=function" CC=clang CXX=clang++' || '' }}
+        skipSlow: ${{ matrix.asan }}
+    - name: make
+      run: make -j$(/usr/bin/nproc) >/dev/null
+    - name: make install
+      uses: ./.github/actions/install-linux
+    - name: Test
+      if: matrix.asan == false
+      uses: ./.github/actions/test-linux
+    - name: Test Tracing JIT
+      uses: ./.github/actions/test-linux
+      with:
+        jitType: tracing
+        runTestsParameters: >-
+          -d zend_extension=opcache.so
+          -d opcache.enable_cli=1
+          ${{ matrix.asan && '--asan -x' || '' }}
+    - name: Verify generated files are up to date
+      if: ${{ !matrix.asan }}
+      uses: ./.github/actions/verify-generated-files      
   LINUX_X32:
     if: github.repository == 'php/php-src' || github.event_name == 'pull_request'
     name: LINUX_X32_DEBUG_ZTS
