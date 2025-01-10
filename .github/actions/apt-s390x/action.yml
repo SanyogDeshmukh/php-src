@@ -27,6 +27,7 @@ runs:
           unzip \
           bison \
           re2c \
+          gh \
           locales \
           ldap-utils \
           openssl \
