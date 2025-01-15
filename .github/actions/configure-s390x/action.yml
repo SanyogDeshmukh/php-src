@@ -4,7 +4,7 @@ inputs:
     default: ''
     required: false
   skipSlow:
-    default: false
+    default: true
     required: false
   asan:
     default: false
@@ -23,7 +23,8 @@ runs:
           --without-pcre-jit \
           --enable-phpdbg \
           --enable-fpm \
-          --with-pdo-mysql=mysqlnd \
+          --enable-mysqlnd --with-pdo-mysql \
+          --with-pdo-pgsql=/usr/bin/pg_config \
           --with-mysqli=mysqlnd \
           ${{ inputs.skipSlow == 'false' && '--with-pgsql' || '' }} \
           ${{ inputs.skipSlow == 'false' && '--with-pdo-pgsql' || '' }} \
