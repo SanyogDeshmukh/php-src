@@ -58,7 +58,6 @@ runs:
           ${{ inputs.skipSlow == 'false' && '--with-enchant=/usr' || '' }} \
           --enable-sysvmsg \
           --with-ffi \
-          --enable-zend-test \
           ${{ inputs.skipSlow == 'false' && '--enable-dl-test=shared' || '' }} \
           ${{ inputs.skipSlow == 'false' && '--with-ldap' || '' }} \
           ${{ inputs.skipSlow == 'false' && '--with-ldap-sasl' || '' }} \
