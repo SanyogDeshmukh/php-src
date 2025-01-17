@@ -187,14 +187,13 @@ workflows:
     jobs:
       - arm
 version: 2.1
-jobs:
-  build:
-    docker:
-      - image: cimg/base:current
-    resource_class: sanyog/label
-    steps:
-      - run: echo "Hi I'm on a Container Runner!"
 workflows:
-  build-workflow:
+  testing:
     jobs:
-      - build
+      - runner-test
+jobs:
+  runner-test:
+    machine: true
+    resource_class: sanyog/ub24-s390x
+    steps:
+      - run: echo "Hi I'm on Runners!"
