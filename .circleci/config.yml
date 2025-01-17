@@ -1,13 +1,8 @@
 version: 2.1
 
 jobs:
-  runner-test:
-    machine: true
+  s390x:
     resource_class: sanyog/ub24-s390x
-    steps:
-      - run: echo "Hi I'm on Runners!"
-  arm:
-    resource_class: arm.medium
     docker:
       - image: cimg/base:current-22.04
       - image: mysql:8.3
@@ -190,5 +185,5 @@ jobs:
 workflows:
   push-workflow:
     jobs:
-      - arm
+      - s390x
       
