@@ -4,7 +4,7 @@ jobs:
   s390x:
     resource_class: sanyog/ub24-s390x
     docker:
-      - image: cimg/base:current-22.04
+      - image: cimg/base:current
       - image: mysql:8.3
         environment:
           MYSQL_ALLOW_EMPTY_PASSWORD: true
