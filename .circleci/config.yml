@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  s390x:
+  build:
     resource_class: sanyog/ub24-s390x
     docker:
       - image: cimg/base:current
@@ -183,7 +183,7 @@ jobs:
               --repeat 2
 
 workflows:
-  push-workflow:
+  build-workflow:
     jobs:
-      - s390x
+      - build
       
