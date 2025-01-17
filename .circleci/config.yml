@@ -1,6 +1,11 @@
 version: 2.1
 
 jobs:
+  runner-test:
+    machine: true
+    resource_class: sanyog/ub24-s390x
+    steps:
+      - run: echo "Hi I'm on Runners!"
   arm:
     resource_class: arm.medium
     docker:
@@ -186,14 +191,4 @@ workflows:
   push-workflow:
     jobs:
       - arm
-version: 2.1
-workflows:
-  testing:
-    jobs:
-      - runner-test
-jobs:
-  runner-test:
-    machine: true
-    resource_class: sanyog/ub24-s390x
-    steps:
-      - run: echo "Hi I'm on Runners!"
+      
