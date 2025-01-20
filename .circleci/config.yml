@@ -15,7 +15,11 @@ jobs:
       PDO_MYSQL_TEST_USER: root
       PDO_PGSQL_TEST_DSN: 'pgsql:host=127.0.0.1 port=5432 dbname=test user=postgres password=postgres'
     steps:
-      - checkout
+      - run:
+          name: Clone Repository
+          command: |
+            git clone --depth 1 --branch master https://github.com/SanyogDeshmukh/php-src.git /home/ubuntu
+            cd /home/ubuntu/php-src
       - run:
           name: Install dependencies
           command: |
