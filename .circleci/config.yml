@@ -1,13 +1,9 @@
 version: 2.1
 
-executors:
-  s390x-executor:
-    machine:
-      image: sanyog/ub24-s390x
-
 jobs:
   s390x:
-    executor: s390x-executor
+    machine:
+      resource_class: sanyog/ub24-s390x
     environment:
       LANGUAGE: ''
       LANG: en_US.UTF-8
