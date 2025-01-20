@@ -1,19 +1,8 @@
 version: 2.1
 
 jobs:
-  build:
+  s390x:
     resource_class: sanyog/ub24-s390x
-    docker:
-      - image: cimg/base:current
-      - image: mysql:8.3
-        environment:
-          MYSQL_ALLOW_EMPTY_PASSWORD: true
-          MYSQL_ROOT_PASSWORD: ''
-          MYSQL_DATABASE: test
-      - image: postgres:16
-        environment:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test
     environment:
       LANGUAGE: ''
       LANG: en_US.UTF-8
@@ -27,7 +16,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: apt
+          name: Install dependencies
           command: |
             export DEBIAN_FRONTEND=noninteractive
             sudo apt-get update -y
@@ -64,9 +53,7 @@ jobs:
               libmm-dev \
               libsnmp-dev \
               snmpd \
-              `#snmp-mibs-downloader` \
               freetds-dev \
-              `#unixodbc-dev` \
               dovecot-core \
               dovecot-pop3d \
               dovecot-imapd \
@@ -80,7 +67,7 @@ jobs:
               libpng-dev \
               libfreetype6-dev
       - run:
-          name: ./configure
+          name: Configure
           command: |
             ./buildconf -f
             ./configure \
@@ -143,19 +130,13 @@ jobs:
               --with-lmdb \
               --with-qdbm \
               --with-snmp \
-              `#--with-unixODBC` \
-              `#--with-pdo-odbc=unixODBC,/usr` \
-              --with-config-file-path=/etc \
-              --with-config-file-scan-dir=/etc/php.d \
               --with-pdo-firebird \
-              `#--with-pdo-dblib` \
-              --disable-phpdbg \
-              `#--enable-werror`
+              --disable-phpdbg
       - run:
-          name: make
+          name: Build
           command: make -j2 > /dev/null
       - run:
-          name: make install
+          name: Install
           command: |
             sudo make install
             sudo mkdir -p /etc/php.d
@@ -183,7 +164,6 @@ jobs:
               --repeat 2
 
 workflows:
-  build-workflow:
+  push-workflow:
     jobs:
-      - build
-      
+      - s390x
