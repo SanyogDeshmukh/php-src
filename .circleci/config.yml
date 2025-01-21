@@ -13,7 +13,6 @@ jobs:
       PDO_MYSQL_TEST_DSN: 'mysql:host=127.0.0.1;dbname=test'
       PDO_MYSQL_TEST_PASS: ''
       PDO_MYSQL_TEST_USER: root
-      PDO_PGSQL_TEST_DSN: 'pgsql:host=127.0.0.1 port=5432 dbname=test user=postgres password=postgres'
     steps:
       - run:
           name: Clone Repository
