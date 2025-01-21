@@ -7,12 +7,12 @@ jobs:
     environment:
       LANGUAGE: ''
       LANG: en_US.UTF-8
-      MYSQL_TEST_HOST: '127.0.0.1'
-      MYSQL_TEST_PASSWD: ''
-      MYSQL_TEST_USER: root
-      PDO_MYSQL_TEST_DSN: 'mysql:host=127.0.0.1;dbname=test'
-      PDO_MYSQL_TEST_PASS: ''
-      PDO_MYSQL_TEST_USER: root
+     # MYSQL_TEST_HOST: '127.0.0.1'
+     #MYSQL_TEST_PASSWD: ''
+     # MYSQL_TEST_USER: root
+     # PDO_MYSQL_TEST_DSN: 'mysql:host=127.0.0.1;dbname=test'
+     # PDO_MYSQL_TEST_PASS: ''
+     # PDO_MYSQL_TEST_USER: root
     steps:
       - run:
           name: Clone Repository
