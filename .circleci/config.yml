@@ -76,7 +76,7 @@ jobs:
       - run:
           name: Configure
           command: |
-             pwd
+            pwd
             ./buildconf -f
             ./configure \
               --enable-debug \
