@@ -18,8 +18,9 @@ jobs:
       - run:
           name: Clone Repository
           command: |
-            git clone --depth 1 --branch master https://github.com/SanyogDeshmukh/php-src.git /home/circleci
-            cd /home/circleci/php-src
+            cd /home/circleci
+            git clone --depth 1 --branch master https://github.com/SanyogDeshmukh/php-src.git
+            cd php-src
       - run:
           name: Install dependencies
           command: |
