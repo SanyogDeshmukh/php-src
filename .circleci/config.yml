@@ -19,7 +19,6 @@ jobs:
           name: Clone Repository
           command: |
             git clone --depth 1 --branch master https://github.com/SanyogDeshmukh/php-src.git
-            cd php-src
       - run:
           name: Install dependencies
           command: |
@@ -140,10 +139,13 @@ jobs:
               --disable-phpdbg
       - run:
           name: Build
-          command: make -j2 > /dev/null
+          command: |
+           cd php-src
+           make -j2 > /dev/null
       - run:
           name: Install
           command: |
+            cd php-src
             sudo make install
             sudo mkdir -p /etc/php.d
             sudo chmod 777 /etc/php.d
@@ -153,6 +155,7 @@ jobs:
           name: Test
           no_output_timeout: 30m
           command: |
+            cd php-src
             sapi/cli/php run-tests.php \
               -d zend_extension=opcache.so \
               -d opcache.enable_cli=1 \
