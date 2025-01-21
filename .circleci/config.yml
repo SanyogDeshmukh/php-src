@@ -18,8 +18,6 @@ jobs:
       - run:
           name: Clone Repository
           command: |
-            pwd
-            cd /home/circleci
             git clone --depth 1 --branch master https://github.com/SanyogDeshmukh/php-src.git
             cd php-src
       - run:
