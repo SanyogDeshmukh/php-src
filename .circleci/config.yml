@@ -18,6 +18,7 @@ jobs:
           name: Clone Repository
           command: |
             git clone --depth 1 --branch master https://github.com/SanyogDeshmukh/php-src.git
+            uname -a
       - run:
           name: Install dependencies
           command: |
@@ -170,6 +171,7 @@ jobs:
               --show-slow 1000 \
               --set-timeout 120 \
               --repeat 2
+            uname -a
 
 workflows:
   push-workflow:
