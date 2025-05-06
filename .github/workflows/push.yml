@@ -164,6 +164,15 @@ jobs:
         echo "::group::Show installed package versions"
         dpkg -l
         echo "::endgroup::"
+    - name: Start PostgreSQL
+      run: |
+        docker run -d --name postgres \
+          -e POSTGRES_USER=postgres \
+          -e POSTGRES_PASSWORD=postgres \
+          -e POSTGRES_DB=test \
+          -p 5432:5432 \
+          --platform linux/s390x \
+          postgres:latest
     - name: Setup Caddy server
       uses: ./.github/actions/setup-caddy
     - name: ccache
