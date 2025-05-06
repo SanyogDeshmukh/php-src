@@ -156,6 +156,21 @@ jobs:
       uses: actions/checkout@v4
     - name: apt
       uses: ./.github/actions/apt-s390x
+    - name: Start and verify services
+      run: |
+        echo "::group::Starting MySQL and PostgreSQL"
+        sudo systemctl start mysql || sudo service mysql start
+        sudo systemctl start postgresql || sudo service postgresql start
+        echo "::endgroup::"
+
+        echo "::group::Checking MySQL status"
+        sudo systemctl status mysql 
+        echo "::endgroup::"
+
+        echo "::group::Checking PostgreSQL status"
+        pg_isready || true
+        echo "::endgroup::"
+
     - name: System info
       run: |
         echo "::group::Show host CPU info"
@@ -164,15 +179,6 @@ jobs:
         echo "::group::Show installed package versions"
         dpkg -l
         echo "::endgroup::"
-    - name: Start PostgreSQL
-      run: |
-        docker run -d --name postgres \
-          -e POSTGRES_USER=postgres \
-          -e POSTGRES_PASSWORD=postgres \
-          -e POSTGRES_DB=test \
-          -p 5432:5432 \
-          --platform linux/s390x \
-          postgres:latest
     - name: Setup Caddy server
       uses: ./.github/actions/setup-caddy
     - name: ccache
