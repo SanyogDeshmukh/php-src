@@ -59,6 +59,7 @@ runs:
           ${{ inputs.skipSlow == 'false' && '--with-enchant=/usr' || '' }} \
           --enable-sysvmsg \
           --with-ffi \
+          --enable-zend-test \
           ${{ inputs.skipSlow == 'false' && '--enable-dl-test=shared' || '' }} \
           ${{ inputs.skipSlow == 'false' && '--with-ldap' || '' }} \
           ${{ inputs.skipSlow == 'false' && '--with-ldap-sasl' || '' }} \
@@ -77,3 +78,5 @@ runs:
           ${{ inputs.skipSlow == 'false' && '--with-pdo-odbc=unixODBC,/usr' || '' }} \
           --with-config-file-path=/etc \
           --with-config-file-scan-dir=/etc/php.d \
+          --with-pdo-dblib 
+          
