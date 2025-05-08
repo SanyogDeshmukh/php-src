@@ -26,6 +26,7 @@ runs:
           --enable-mysqlnd --with-pdo-mysql \
           --with-pdo-pgsql=/usr/bin/pg_config \
           --with-mysqli=mysqlnd \
+          --with-pgsql \
           --enable-intl \
           --enable-gd \
           --with-jpeg \
