@@ -33,9 +33,13 @@ runs:
         export PDO_DBLIB_TEST_DSN="dblib:host=127.0.0.1;dbname=master;version=7.0"
         export PDO_DBLIB_TEST_USER="pdo_test"
         export PDO_DBLIB_TEST_PASS="password"
-        export PGSQL_TEST_CONNSTR="host=localhost dbname=test port=5432 user=postgres password=postgres"
+
+        pg_isready -h localhost -p 5432 -U postgres || true
+        sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname = 'test'" | grep -q 1 || \
+        sudo -u postgres psql -c "CREATE DATABASE test"
+        export PGSQL_TEST_CONNSTR="host=localhost dbname=test port=5432 user=postgres"
         if [[ -z "$PDO_PGSQL_TEST_DSN" ]]; then
-          export PDO_PGSQL_TEST_DSN="pgsql:host=localhost port=5432 dbname=test user=postgres password=postgres"
+          export PDO_PGSQL_TEST_DSN="pgsql:host=localhost port=5432 dbname=test user=postgres"
         fi
         export PDO_FIREBIRD_TEST_DATABASE=test.fdb
         if [[ -z "$PDO_FIREBIRD_TEST_DSN" ]]; then
