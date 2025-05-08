@@ -14,59 +14,59 @@ runs:
   steps:
     - shell: bash
       run: |
-        - shell: bash
-  run: |
-    set -x
-    # Start PostgreSQL (for self-hosted runners or environments without services)
-    sudo service postgresql start || true
+        set -x
 
-    # Wait for PostgreSQL to be ready
-    until pg_isready -h localhost -p 5432 -U postgres; do sleep 1; done
+        # Start PostgreSQL (for self-hosted runners or environments without services)
+        sudo service postgresql start || true
 
-    # Create test DB if not exists (use sudo, no password)
-    sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname = 'test'" | grep -q 1 || \
-      sudo -u postgres psql -c "CREATE DATABASE test"
+        # Wait for PostgreSQL to be ready
+        until pg_isready -h localhost -p 5432 -U postgres; do sleep 1; done
 
-    export MYSQL_TEST_USER=root
-    export MYSQL_TEST_PASSWD=root
-    if [[ -z "$PDO_MYSQL_TEST_DSN" ]]; then
-      export PDO_MYSQL_TEST_DSN="mysql:host=localhost;dbname=test"
-    fi
-    export PDO_MYSQL_TEST_USER=root
-    export PDO_MYSQL_TEST_PASS=root
+        # Create test DB if not exists (use sudo, no password)
+        sudo -u postgres psql -tc "SELECT 1 FROM pg_database WHERE datname = 'test'" | grep -q 1 || \
+        sudo -u postgres psql -c "CREATE DATABASE test"
 
-    export PDO_DBLIB_TEST_DSN="dblib:host=127.0.0.1;dbname=master;version=7.0"
-    export PDO_DBLIB_TEST_USER="pdo_test"
-    export PDO_DBLIB_TEST_PASS="password"
+        export MYSQL_TEST_USER=root
+        export MYSQL_TEST_PASSWD=root
+        if [[ -z "$PDO_MYSQL_TEST_DSN" ]]; then
+          export PDO_MYSQL_TEST_DSN="mysql:host=localhost;dbname=test"
+        fi
+        export PDO_MYSQL_TEST_USER=root
+        export PDO_MYSQL_TEST_PASS=root
 
-    export PGSQL_TEST_CONNSTR="host=localhost dbname=test port=5432 user=postgres"
-    if [[ -z "$PDO_PGSQL_TEST_DSN" ]]; then
-      export PDO_PGSQL_TEST_DSN="pgsql:host=localhost port=5432 dbname=test user=postgres"
-    fi
+        export PDO_DBLIB_TEST_DSN="dblib:host=127.0.0.1;dbname=master;version=7.0"
+        export PDO_DBLIB_TEST_USER="pdo_test"
+        export PDO_DBLIB_TEST_PASS="password"
 
-    export PDO_FIREBIRD_TEST_DATABASE=test.fdb
-    if [[ -z "$PDO_FIREBIRD_TEST_DSN" ]]; then
-      export PDO_FIREBIRD_TEST_DSN=firebird:dbname=localhost:test.fdb
-    fi
-    export PDO_FIREBIRD_TEST_PASS=test
-    export PDO_FIREBIRD_TEST_USER=test
+        export PGSQL_TEST_CONNSTR="host=localhost dbname=test port=5432 user=postgres"
+        if [[ -z "$PDO_PGSQL_TEST_DSN" ]]; then
+          export PDO_PGSQL_TEST_DSN="pgsql:host=localhost port=5432 dbname=test user=postgres"
+        fi
 
-    export ODBC_TEST_USER="odbc_test"
-    export ODBC_TEST_PASS="password"
-    export ODBC_TEST_DSN="Driver={ODBC Driver 17 for SQL Server};Server=127.0.0.1;Database=odbc;uid=$ODBC_TEST_USER;pwd=$ODBC_TEST_PASS"
-    export PDO_ODBC_TEST_DSN="odbc:Driver={ODBC Driver 17 for SQL Server};Server=127.0.0.1;Database=pdo_odbc;uid=$ODBC_TEST_USER;pwd=$ODBC_TEST_PASS"
+        export PDO_FIREBIRD_TEST_DATABASE=test.fdb
+        if [[ -z "$PDO_FIREBIRD_TEST_DSN" ]]; then
+          export PDO_FIREBIRD_TEST_DSN=firebird:dbname=localhost:test.fdb
+        fi
+        export PDO_FIREBIRD_TEST_PASS=test
+        export PDO_FIREBIRD_TEST_USER=test
 
-    export SKIP_IO_CAPTURE_TESTS=1
-    export STACK_LIMIT_DEFAULTS_CHECK=1
+        export ODBC_TEST_USER="odbc_test"
+        export ODBC_TEST_PASS="password"
+        export ODBC_TEST_DSN="Driver={ODBC Driver 17 for SQL Server};Server=127.0.0.1;Database=odbc;uid=$ODBC_TEST_USER;pwd=$ODBC_TEST_PASS"
+        export PDO_ODBC_TEST_DSN="odbc:Driver={ODBC Driver 17 for SQL Server};Server=127.0.0.1;Database=pdo_odbc;uid=$ODBC_TEST_USER;pwd=$ODBC_TEST_PASS"
 
-    sapi/cli/php run-tests.php -P -q ${{ inputs.runTestsParameters }} \
-      -d opcache.jit=${{ inputs.jitType }} \
-      -d opcache.protect_memory=1 \
-      -d opcache.jit_buffer_size=64M \
-      ${{ inputs.idleCpu == 'true' && '-j$(($(/usr/bin/nproc) - 1))' || '-j$(/usr/bin/nproc)' }} \
-      -g FAIL,BORK,LEAK,XLEAK \
-      --no-progress \
-      --offline \
-      --show-diff \
-      --show-slow 1000 \
-      --set-timeout 120
+        export SKIP_IO_CAPTURE_TESTS=1
+        export STACK_LIMIT_DEFAULTS_CHECK=1
+
+        sapi/cli/php run-tests.php -P -q ${{ inputs.runTestsParameters }} \
+          -d opcache.jit=${{ inputs.jitType }} \
+          -d opcache.protect_memory=1 \
+          -d opcache.jit_buffer_size=64M \
+          ${{ inputs.idleCpu == 'true' && '-j$(($(/usr/bin/nproc) - 1))' || '-j$(/usr/bin/nproc)' }} \
+          -g FAIL,BORK,LEAK,XLEAK \
+          --no-progress \
+          --offline \
+          --show-diff \
+          --show-slow 1000 \
+          --set-timeout 120  
+      
