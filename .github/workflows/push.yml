@@ -159,12 +159,12 @@ jobs:
     - name: Start and verify services
       run: |
         echo "::group::Starting MySQL and PostgreSQL"
-        sudo service start mysql || sudo service mysql start
-        sudo service start postgresql || sudo service postgresql start
+        sudo service mysql start
+        sudo service postgresql start
         echo "::endgroup::"
 
         echo "::group::Checking MySQL status"
-        sudo service status mysql 
+        sudo service mysql status 
         echo "::endgroup::"
 
         echo "::group::Checking PostgreSQL status"
