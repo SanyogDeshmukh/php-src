@@ -4,7 +4,7 @@ inputs:
     default: ''
     required: false
   skipSlow:
-    default: true
+    default: false
     required: false
   asan:
     default: false
