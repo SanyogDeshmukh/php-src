@@ -13,7 +13,7 @@ runs:
   using: composite
   steps:
     - shell: bash
-    run: |
+      run: |
         set -x
         # Start PostgreSQL (for self-hosted runners or environments without services)
         sudo service postgresql start || true
