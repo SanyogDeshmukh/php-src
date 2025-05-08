@@ -164,7 +164,7 @@ jobs:
         echo "::endgroup::"
 
         echo "::group::Checking MySQL status"
-        sudo systemctl status mysql 
+        sudo service status mysql 
         echo "::endgroup::"
 
         echo "::group::Checking PostgreSQL status"
